@@ -1,48 +1,56 @@
-import Head from 'next/head';
-import Link from 'next/link';
+// pages/index.js - Landing Page
+import Head from 'next/head'
+import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       <Head>
-        <title>Construction Draw Verification</title>
-        <meta name="description" content="AI-powered construction loan draw verification" />
+        <title>Construction Draw Verification SaaS</title>
+        <meta name="description" content="Streamline construction draw approvals" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
-            Construction Draw Verification
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            AI-powered document analysis for construction loans
-          </p>
+      <div className="min-h-screen bg-gradient-to-br from-blue-900 to-gray-900">
+        <div className="container mx-auto px-6 py-24">
+          <div className="text-center text-white">
+            <h1 className="text-5xl font-bold mb-6">
+              Construction Draw Verification Platform
+            </h1>
+            <p className="text-xl mb-12 max-w-2xl mx-auto">
+              Streamline construction loan draw approvals with AI-powered document analysis. 
+              Reduce processing time from days to minutes.
+            </p>
 
-          <div className="space-x-4">
-            <Link href="/submit" className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
-              Submit Documents
-            </Link>
-            <Link href="/auth/login" className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700">
-              Banker Login
-            </Link>
+            <div className="space-y-4 sm:space-y-0 sm:space-x-6 sm:flex sm:justify-center">
+              <Link href="/submit" className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg transition duration-300">
+                Submit Draw Request
+              </Link>
+              <Link href="/auth/login" className="inline-block bg-gray-600 hover:bg-gray-700 text-white font-bold py-4 px-8 rounded-lg transition duration-300">
+                Banker Login
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold mb-2">Fast Processing</h3>
-            <p className="text-gray-600">Process draw requests in minutes, not days</p>
-          </div>
-          <div className="text-center">
-            <h3 className="text-lg font-semibold mb-2">AI-Powered</h3>
-            <p className="text-gray-600">Automated document analysis and risk assessment</p>
-          </div>
-          <div className="text-center">
-            <h3 className="text-lg font-semibold mb-2">Bank-Grade Security</h3>
-            <p className="text-gray-600">Enterprise security for sensitive financial documents</p>
+          <div className="mt-24 grid md:grid-cols-3 gap-8 text-white">
+            <div className="text-center p-6">
+              <div className="text-4xl mb-4">âš¡</div>
+              <h3 className="text-xl font-bold mb-2">99% Faster Processing</h3>
+              <p>Reduce draw review time from 3-5 days to under 2 hours</p>
+            </div>
+            <div className="text-center p-6">
+              <div className="text-4xl mb-4">ðŸ”</div>
+              <h3 className="text-xl font-bold mb-2">AI-Powered Analysis</h3>
+              <p>Automatic document verification and issue detection</p>
+            </div>
+            <div className="text-center p-6">
+              <div className="text-4xl mb-4">ðŸ¦</div>
+              <h3 className="text-xl font-bold mb-2">Bank-Grade Security</h3>
+              <p>Enterprise security and compliance standards</p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </>
+  )
 }
