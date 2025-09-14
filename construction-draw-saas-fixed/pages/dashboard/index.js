@@ -1,150 +1,149 @@
-import { useState, useEffect } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
+// pages/submit/index.js - Document Upload Portal
+import { useState } from 'react'
+import Link from 'next/link'
+import Head from 'next/head'
 
-export default function Dashboard() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function Submit() {
+  const [projectName, setProjectName] = useState('')
+  const [address, setAddress] = useState('')
+  const [loanAmount, setLoanAmount] = useState('')
+  const [file, setFile] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
 
-  useEffect(() => {
-    // Simulate loading projects
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setIsUploading(true)
+
+    // Demo upload process
     setTimeout(() => {
-      setProjects([
-        {
-          id: 1,
-          name: 'Kroc Construction Project',
-          address: '123 Main St, Kent County',
-          amount: 156978,
-          status: 'pending',
-          completion: 34.47,
-          issues: 4,
-          submittedAt: '2023-03-02'
-        },
-        {
-          id: 2,
-          name: 'Riverside Development',
-          address: '456 Oak Ave, Kent County', 
-          amount: 245000,
-          status: 'approved',
-          completion: 67.5,
-          issues: 0,
-          submittedAt: '2023-03-01'
-        }
-      ]);
-      setLoading(false);
-    }, 1000);
-  }, []);
+      alert(`Demo upload successful!\n\nProject: ${projectName}\nLoan Amount: $${loanAmount}\nFile: ${file?.name || 'No file selected'}\n\nProcessing complete! Banker will be notified.`)
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'approved': return 'bg-green-100 text-green-800';
-      case 'flagged': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+      // Reset form
+      setProjectName('')
+      setAddress('')
+      setLoanAmount('')
+      setFile(null)
+      setIsUploading(false)
+    }, 2000)
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       <Head>
-        <title>Banker Dashboard - Construction Draw Verification</title>
+        <title>Submit Draw Request - Construction SaaS</title>
       </Head>
 
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/" className="text-xl font-semibold">
-                Construction Draw
-              </Link>
-              <span className="ml-4 text-sm text-gray-500">Banker Dashboard</span>
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-6 py-12">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Submit Draw Request
+              </h1>
+              <p className="text-lg text-gray-600">
+                Upload your construction documents for AI-powered verification
+              </p>
             </div>
-            <div className="flex items-center">
-              <span className="text-sm text-gray-700 mr-4">banker@demo.com</span>
-              <Link href="/auth/login" className="text-sm text-blue-600 hover:text-blue-800">
-                Logout
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Draw Requests</h1>
-          <p className="text-gray-600">Review and approve construction loan draw requests</p>
-        </div>
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Project Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="e.g. Sunset Ridge Development - Phase 2"
+                  />
+                </div>
 
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="text-gray-500">Loading projects...</div>
-          </div>
-        ) : (
-          <div className="bg-white shadow overflow-hidden sm:rounded-md">
-            <ul className="divide-y divide-gray-200">
-              {projects.map((project) => (
-                <li key={project.id}>
-                  <div className="px-4 py-4 sm:px-6 hover:bg-gray-50">
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1">
-                        <h3 className="text-lg font-medium text-gray-900">
-                          {project.name}
-                        </h3>
-                        <p className="text-sm text-gray-500">{project.address}</p>
-                        <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
-                          <span>Draw Amount: ${project.amount.toLocaleString()}</span>
-                          <span>Completion: {project.completion}%</span>
-                          <span>Submitted: {project.submittedAt}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        {project.issues > 0 && (
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                            {project.issues} issues
-                          </span>
-                        )}
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(project.status)}`}>
-                          {project.status}
-                        </span>
-                        <div className="flex space-x-2">
-                          <button className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
-                            Approve
-                          </button>
-                          <button className="bg-red-600 text-white px-3 py-1 rounded text-sm hover:bg-red-700">
-                            Flag
-                          </button>
-                          <button className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
-                            Details
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Project Address *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="123 Construction Ave, City, State 12345"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Total Loan Amount *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    value={loanAmount}
+                    onChange={(e) => setLoanAmount(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="500000"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Construction Documents *
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    <input
+                      type="file"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      className="mb-4"
+                    />
+                    <p className="text-sm text-gray-600">
+                      Upload pay applications, lien waivers, insurance certificates, etc.
+                      <br />
+                      Supported formats: PDF, DOC, XLS (Max 10MB)
+                    </p>
+                    {file && (
+                      <p className="mt-2 text-sm text-green-600">
+                        Selected: {file.name}
+                      </p>
+                    )}
                   </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+                </div>
 
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold mb-2">Total Requests</h3>
-            <p className="text-3xl font-bold text-blue-600">24</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold mb-2">Pending Review</h3>
-            <p className="text-3xl font-bold text-yellow-600">8</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold mb-2">Approved</h3>
-            <p className="text-3xl font-bold text-green-600">14</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold mb-2">Flagged</h3>
-            <p className="text-3xl font-bold text-red-600">2</p>
+                <div className="bg-blue-50 p-4 rounded-md">
+                  <h3 className="text-sm font-medium text-blue-900 mb-2">
+                    What happens next?
+                  </h3>
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>â€¢ AI analyzes your documents in under 2 minutes</li>
+                    <li>â€¢ Banker receives instant verification report</li>
+                    <li>â€¢ You get approval notification within 24 hours</li>
+                  </ul>
+                </div>
+
+                <div className="flex space-x-4">
+                  <button
+                    type="submit"
+                    disabled={isUploading}
+                    className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium"
+                  >
+                    {isUploading ? 'Processing...' : 'Submit Draw Request'}
+                  </button>
+                  <Link
+                    href="/"
+                    className="px-6 py-3 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 font-medium"
+                  >
+                    Cancel
+                  </Link>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </>
+  )
 }
