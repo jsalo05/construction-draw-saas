@@ -1,112 +1,149 @@
-import { useState } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
+// pages/submit/index.js - Document Upload Portal
+import { useState } from 'react'
+import Link from 'next/link'
+import Head from 'next/head'
 
 export default function Submit() {
-  const [uploading, setUploading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [projectName, setProjectName] = useState('')
+  const [address, setAddress] = useState('')
+  const [loanAmount, setLoanAmount] = useState('')
+  const [file, setFile] = useState(null)
+  const [isUploading, setIsUploading] = useState(false)
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setUploading(true);
+    e.preventDefault()
+    setIsUploading(true)
 
-    // Simulate upload
+    // Demo upload process
     setTimeout(() => {
-      setUploading(false);
-      setSuccess(true);
-    }, 2000);
-  };
+      alert(`Demo upload successful!\n\nProject: ${projectName}\nLoan Amount: $${loanAmount}\nFile: ${file?.name || 'No file selected'}\n\nProcessing complete! Banker will be notified.`)
+
+      // Reset form
+      setProjectName('')
+      setAddress('')
+      setLoanAmount('')
+      setFile(null)
+      setIsUploading(false)
+    }, 2000)
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       <Head>
-        <title>Submit Documents - Construction Draw Verification</title>
+        <title>Submit Draw Request - Construction SaaS</title>
       </Head>
 
-      <nav className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <Link href="/" className="flex items-center text-xl font-semibold">
-              Construction Draw
-            </Link>
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-6 py-12">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                Submit Draw Request
+              </h1>
+              <p className="text-lg text-gray-600">
+                Upload your construction documents for AI-powered verification
+              </p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Project Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={projectName}
+                    onChange={(e) => setProjectName(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="e.g. Sunset Ridge Development - Phase 2"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Project Address *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="123 Construction Ave, City, State 12345"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Total Loan Amount *
+                  </label>
+                  <input
+                    type="number"
+                    required
+                    value={loanAmount}
+                    onChange={(e) => setLoanAmount(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="500000"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Construction Documents *
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    <input
+                      type="file"
+                      accept=".pdf,.doc,.docx,.xls,.xlsx"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      className="mb-4"
+                    />
+                    <p className="text-sm text-gray-600">
+                      Upload pay applications, lien waivers, insurance certificates, etc.
+                      <br />
+                      Supported formats: PDF, DOC, XLS (Max 10MB)
+                    </p>
+                    {file && (
+                      <p className="mt-2 text-sm text-green-600">
+                        Selected: {file.name}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-blue-50 p-4 rounded-md">
+                  <h3 className="text-sm font-medium text-blue-900 mb-2">
+                    What happens next?
+                  </h3>
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>â€¢ AI analyzes your documents in under 2 minutes</li>
+                    <li>â€¢ Banker receives instant verification report</li>
+                    <li>â€¢ You get approval notification within 24 hours</li>
+                  </ul>
+                </div>
+
+                <div className="flex space-x-4">
+                  <button
+                    type="submit"
+                    disabled={isUploading}
+                    className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium"
+                  >
+                    {isUploading ? 'Processing...' : 'Submit Draw Request'}
+                  </button>
+                  <Link
+                    href="/"
+                    className="px-6 py-3 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 font-medium"
+                  >
+                    Cancel
+                  </Link>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </nav>
-
-      <div className="max-w-2xl mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Submit Draw Request</h1>
-
-        {success ? (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-            <h2 className="text-lg font-semibold text-green-800 mb-2">✅ Submitted Successfully!</h2>
-            <p className="text-green-700">Your draw request has been processed and is under review.</p>
-            <Link href="/dashboard" className="inline-block mt-4 text-blue-600 hover:text-blue-800">
-              View Status →
-            </Link>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Project Name
-              </label>
-              <input
-                type="text"
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                placeholder="Enter project name"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Project Address
-              </label>
-              <textarea
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                rows="2"
-                placeholder="Enter project address"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Draw Amount
-              </label>
-              <input
-                type="number"
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                placeholder="Enter draw amount"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Upload Documents
-              </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
-                <input type="file" multiple accept=".pdf,.jpg,.png" className="hidden" id="file-upload" />
-                <label htmlFor="file-upload" className="cursor-pointer block text-center">
-                  <div className="text-gray-500">
-                    <p>Click to upload or drag and drop</p>
-                    <p className="text-sm">PDF, JPG, PNG files</p>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={uploading}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50"
-            >
-              {uploading ? 'Processing...' : 'Submit Draw Request'}
-            </button>
-          </form>
-        )}
       </div>
-    </div>
-  );
+    </>
+  )
 }
