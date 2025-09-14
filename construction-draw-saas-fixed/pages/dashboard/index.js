@@ -1,145 +1,182 @@
-// pages/submit/index.js - Document Upload Portal
+// pages/dashboard/index.js - Banker Dashboard
 import { useState } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
 
-export default function Submit() {
-  const [projectName, setProjectName] = useState('')
-  const [address, setAddress] = useState('')
-  const [loanAmount, setLoanAmount] = useState('')
-  const [file, setFile] = useState(null)
-  const [isUploading, setIsUploading] = useState(false)
+export default function Dashboard() {
+  const [projects] = useState([
+    {
+      id: 1,
+      name: 'Sunset Ridge Development - Phase 2',
+      address: '123 Construction Ave, Denver, CO',
+      loanAmount: 750000,
+      drawAmount: 156000,
+      status: 'pending',
+      completion: 34,
+      submittedDate: '2024-03-15',
+      issues: 2
+    },
+    {
+      id: 2,
+      name: 'Downtown Office Complex',
+      address: '456 Business Blvd, Austin, TX',
+      loanAmount: 1200000,
+      drawAmount: 89000,
+      status: 'approved',
+      completion: 67,
+      submittedDate: '2024-03-14',
+      issues: 0
+    },
+    {
+      id: 3,
+      name: 'Residential Townhomes',
+      address: '789 Family St, Portland, OR',
+      loanAmount: 950000,
+      drawAmount: 234000,
+      status: 'flagged',
+      completion: 45,
+      submittedDate: '2024-03-13',
+      issues: 4
+    }
+  ])
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsUploading(true)
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-100 text-yellow-800'
+      case 'approved': return 'bg-green-100 text-green-800'
+      case 'flagged': return 'bg-red-100 text-red-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
 
-    // Demo upload process
-    setTimeout(() => {
-      alert(`Demo upload successful!\n\nProject: ${projectName}\nLoan Amount: $${loanAmount}\nFile: ${file?.name || 'No file selected'}\n\nProcessing complete! Banker will be notified.`)
-
-      // Reset form
-      setProjectName('')
-      setAddress('')
-      setLoanAmount('')
-      setFile(null)
-      setIsUploading(false)
-    }, 2000)
+  const handleAction = (projectId, action) => {
+    alert(`${action} project ${projectId}\nAction recorded in audit log.`)
   }
 
   return (
     <>
       <Head>
-        <title>Submit Draw Request - Construction SaaS</title>
+        <title>Banker Dashboard - Construction SaaS</title>
       </Head>
 
       <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-6 py-12">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-8">
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                Submit Draw Request
+        {/* Header */}
+        <div className="bg-white shadow">
+          <div className="px-6 py-4">
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-bold text-gray-900">
+                Construction Draw Dashboard
               </h1>
-              <p className="text-lg text-gray-600">
-                Upload your construction documents for AI-powered verification
-              </p>
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-600">Welcome, Demo Banker</span>
+                <Link href="/" className="text-blue-600 hover:text-blue-500">
+                  Logout
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="px-6 py-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-2xl font-bold text-blue-600">3</div>
+              <div className="text-gray-600">Active Projects</div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-2xl font-bold text-yellow-600">1</div>
+              <div className="text-gray-600">Pending Review</div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-2xl font-bold text-green-600">1</div>
+              <div className="text-gray-600">Approved Today</div>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow">
+              <div className="text-2xl font-bold text-red-600">1</div>
+              <div className="text-gray-600">Flagged Issues</div>
+            </div>
+          </div>
+
+          {/* Projects Table */}
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-lg font-medium text-gray-900">Project Portfolio</h2>
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Project Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={projectName}
-                    onChange={(e) => setProjectName(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="e.g. Sunset Ridge Development - Phase 2"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Project Address *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="123 Construction Ave, City, State 12345"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Total Loan Amount *
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    value={loanAmount}
-                    onChange={(e) => setLoanAmount(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="500000"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Construction Documents *
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <input
-                      type="file"
-                      accept=".pdf,.doc,.docx,.xls,.xlsx"
-                      onChange={(e) => setFile(e.target.files[0])}
-                      className="mb-4"
-                    />
-                    <p className="text-sm text-gray-600">
-                      Upload pay applications, lien waivers, insurance certificates, etc.
-                      <br />
-                      Supported formats: PDF, DOC, XLS (Max 10MB)
-                    </p>
-                    {file && (
-                      <p className="mt-2 text-sm text-green-600">
-                        Selected: {file.name}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="bg-blue-50 p-4 rounded-md">
-                  <h3 className="text-sm font-medium text-blue-900 mb-2">
-                    What happens next?
-                  </h3>
-                  <ul className="text-sm text-blue-800 space-y-1">
-                    <li>â€¢ AI analyzes your documents in under 2 minutes</li>
-                    <li>â€¢ Banker receives instant verification report</li>
-                    <li>â€¢ You get approval notification within 24 hours</li>
-                  </ul>
-                </div>
-
-                <div className="flex space-x-4">
-                  <button
-                    type="submit"
-                    disabled={isUploading}
-                    className="flex-1 bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 disabled:opacity-50 font-medium"
-                  >
-                    {isUploading ? 'Processing...' : 'Submit Draw Request'}
-                  </button>
-                  <Link
-                    href="/"
-                    className="px-6 py-3 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 font-medium"
-                  >
-                    Cancel
-                  </Link>
-                </div>
-              </form>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Project</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Draw Amount</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Completion</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Issues</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {projects.map((project) => (
+                    <tr key={project.id} className="hover:bg-gray-50">
+                      <td className="px-6 py-4">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900">{project.name}</div>
+                          <div className="text-sm text-gray-500">{project.address}</div>
+                          <div className="text-xs text-gray-400">Submitted: {project.submittedDate}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900">
+                          ${project.drawAmount.toLocaleString()}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          of ${project.loanAmount.toLocaleString()}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(project.status)}`}>
+                          {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-sm text-gray-900">{project.completion}%</div>
+                        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+                          <div 
+                            className="bg-blue-600 h-2 rounded-full" 
+                            style={{width: `${project.completion}%`}}
+                          ></div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <span className={`text-sm ${project.issues > 0 ? 'text-red-600 font-medium' : 'text-green-600'}`}>
+                          {project.issues} issues
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm space-x-2">
+                        <button 
+                          onClick={() => handleAction(project.id, 'Approved')}
+                          className="text-green-600 hover:text-green-900"
+                        >
+                          Approve
+                        </button>
+                        <button 
+                          onClick={() => handleAction(project.id, 'Flagged')}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          Flag
+                        </button>
+                        <button 
+                          onClick={() => handleAction(project.id, 'Requested more info for')}
+                          className="text-blue-600 hover:text-blue-900"
+                        >
+                          Request Info
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
